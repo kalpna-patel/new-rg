@@ -20,7 +20,7 @@ jobs:
         terraform_version: 1.5.0  # Specify your Terraform version
 
     - name: Configure Azure Credentials
-      uses: azure/setup-azure@v1
+      uses: azure/login@v1
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
