@@ -1,4 +1,4 @@
- name: Data ingestion for pace-metrics to Azure Blob Storage
+name: Data ingestion for pace-metrics to Azure Blob Storage
 
  inputs:
   fileList:
@@ -34,7 +34,9 @@
     required: true
 
 runs:
-  using: composite
+  using: "composite"
+  main: "entrypoint.sh"  # Specify the main file to run in the composite action
+
   steps:
     - name: Check if Azure CLI is installed
       shell: bash
