@@ -17,7 +17,7 @@
   keyVaultUri:
     description: Key-Vault for encryption and webhook secret
     required: true
-    default: https://kv-pace-metrics.vault.azure.net
+    default: https://ingest-key-01.vault.azure.net/
   client-id:
     description: Client ID for OIDC authentication in key-vault
     required: true
@@ -47,10 +47,10 @@ runs:
         az version
 
     - name: Azure OIDC Login
-      uses: azure/login@a65d910e8af852a8061c627c456678983e180302 # v2.2.0
+      uses: azure/login@a48c1681a-7a9d-4d8e-9c0d-141d0af16ddc # v2.2.0
       with:
-        client-id: ${{ inputs.client-id }}
-        tenant-id: ${{ inputs.tenant-id }}
+        client-id: $'6e1ce853-cdf5-4606-a774-bf24c7f365de'
+        tenant-id: $'986595ef-8677-40e7-adbf-dfca10b0321d'
         allow-no-subscriptions: true
 
     - name: Check for existence of payload file
