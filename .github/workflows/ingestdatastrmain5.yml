@@ -8,6 +8,9 @@ on:
 jobs:
   ingest_data:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -23,8 +26,8 @@ jobs:
           echo "Azure CLI Version"
           az version
 
-      - name: Azure OIDC Login
-        uses: azure/login@v2.2.0
+      - name: Azure login
+        uses: azure/login@v2
         with:
           client-id: $'6e1ce853-cdf5-4606-a774-bf24c7f365de'
           tenant-id: $'986595ef-8677-40e7-adbf-dfca10b0321d'
@@ -35,19 +38,18 @@ jobs:
         shell: bash
         run: |
           IFS=',' read -ra FILES <<<"${{ inputs.fileList }}"
-          if [[ ${#FILES[@]} -gt 0 ]]; then
-            ALL_FILE_LIST_EXISTS=1
-          else
-            ALL_FILE_LIST_EXISTS=0
-          fi
+          ALL_FILE_LIST_EXISTS=0
           for FILE in "${FILES[@]}"; do
             FILE=$(echo "$FILE" | xargs)
             if [[ ! -f "${FILE}" ]] && [[ ! "${FILE}" =~ ^http[s]?:// ]]; then
               echo "The following file does not exist: ${FILE}"
               ALL_FILE_LIST_EXISTS=0
               break
+            else
+              ALL_FILE_LIST_EXISTS=1
             fi
           done
+
           if [[ "${{ inputs.jsonPayload }}" == *{*}* ]] || [[ -f "${{ inputs.jsonPayload }}" ]] || [[ ${ALL_FILE_LIST_EXISTS} -eq 1 ]]; then
             echo "payload_exists=true" >> $GITHUB_OUTPUT
           else
@@ -77,4 +79,3 @@ jobs:
         if: steps.payload_check.outputs.payload_exists == 'true'
         run: |
           python3 $GITHUB_ACTION_PATH/kalpna.py "${{ inputs.fileList }}" '${{ inputs.jsonPayload }}' "${{ inputs.nameIngest }}" "${{ inputs.keyVaultUri }}" "${{ inputs.nameSignatureSecret }}" "${{ inputs.storage-account-name }}" "${{ inputs.container-name }}"
-
