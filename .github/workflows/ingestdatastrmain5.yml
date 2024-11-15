@@ -28,7 +28,7 @@ jobs:
         with:
           client-id: $'6e1ce853-cdf5-4606-a774-bf24c7f365de'
           tenant-id: $'986595ef-8677-40e7-adbf-dfca10b0321d'
-          allow-no-subscriptions: true
+          subscription-id: $'48c1681a-7a9d-4d8e-9c0d-141d0af16ddc'
 
       - name: Check for existence of payload file
         id: payload_check
